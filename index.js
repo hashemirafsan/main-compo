@@ -85,7 +85,7 @@ var errors = function(){
 */
 router.get('/user.login&id=:id&pass=:pass',function(req,res){
 	let data = {
-		id:req.params.id,
+		id:parseInt(req.params.id),
 		name:req.params.pass
 	}
 	MongoClient.connect(con, function(err, db) {
