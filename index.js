@@ -26,7 +26,6 @@ app.use(helmet.contentSecurityPolicy({
     defaultSrc: ["'self'"]
   }
 }));
-app.use(helmet.referrerPolicy({ policy: 'same-origin' }));
 app.use(bodyParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
