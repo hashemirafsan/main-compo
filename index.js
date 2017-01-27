@@ -6,6 +6,7 @@
 
 'use strict';
 const express = require('express');
+const helmet = require('helmet');
 const _ = require('lodash');
 var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
@@ -15,6 +16,17 @@ var router = express.Router();
 
 
 
+/*
+* SECURE API USING HELMET
+*/
+app.use(helmet()); //initial helmet here
+app.use(helmet.noCache()); //nocache
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"]
+  }
+}));
+app.use(helmet.referrerPolicy({ policy: 'same-origin' }));
 app.use(bodyParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -41,8 +53,10 @@ var select = function(db,data,res,callback){
   collection.find(data).toArray(function(err, docs) {
     assert.equal(err, null);
     if(err){
+    	res.contentType('application/json');
     	res.json({result:"nothing"});
     }else{
+    	res.contentType('application/json');
     	res.json({status:res.statusCode,result:docs});
     }
     callback(docs);
@@ -115,6 +129,8 @@ app.use('/api', router);
 * DISABLE PART
 */
 app.disable('x-powered-by');
+
+
 
 /*
 * INDEX PART START
