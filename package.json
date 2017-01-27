@@ -1,0 +1,29 @@
+{
+  "name": "leading-university-api",
+  "version": "1.0.0",
+  "description": "main component for building our apps",
+  "main": "index.js",
+  "engines": {
+    "node": "6.9.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hashemirafsan/main-compo.git"
+  },
+  "author": "Hashemi Rafsan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hashemirafsan/main-compo/issues"
+  },
+  "homepage": "https://github.com/hashemirafsan/main-compo#readme",
+  "dependencies": {
+    "body-parser": "^1.16.0",
+    "express": "^4.14.0",
+    "helmet": "^3.4.0",
+    "lodash": "^4.17.4",
+    "mongodb": "^2.2.22"
+  }
+}
