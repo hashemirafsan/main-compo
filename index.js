@@ -6,7 +6,6 @@
 
 'use strict';
 const express = require('express');
-const helmet = require('helmet');
 const _ = require('lodash');
 var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
@@ -16,16 +15,6 @@ var router = express.Router();
 
 
 
-/*
-* SECURE API USING HELMET
-*/
-app.use(helmet()); //initial helmet here
-app.use(helmet.noCache()); //nocache
-app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ["'self'"]
-  }
-}));
 app.use(bodyParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -126,8 +115,6 @@ app.use('/api', router);
 * DISABLE PART
 */
 app.disable('x-powered-by');
-
-
 
 /*
 * INDEX PART START
