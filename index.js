@@ -104,6 +104,33 @@ router.get('/user.login&id=:id&pass=:pass',function(req,res){
 	});
 
 });
+
+router.get('/user.checkid&id=:id',function(req,res){
+  let data = {
+    id:parseInt(req.params.id)
+  }
+  MongoClient.connect(con, function(err, db) {
+    assert.equal(null, err);
+    select(db,data,res,function(){
+      db.close();
+    });
+    db.close();
+  });
+});
+
+router.get('/user.checkemail&email=:email',function(req,res){
+  let data = {
+    email:req.params.email
+  }
+  MongoClient.connect(con, function(err, db) {
+    assert.equal(null, err);
+    select(db,data,res,function(){
+      db.close();
+    });
+    db.close();
+  });
+});
+
 /*
 * POST REST API
 */
