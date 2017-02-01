@@ -13,8 +13,7 @@ var MongoClient = require('mongodb').MongoClient
 var bodyParser = require('body-parser');
 var app = express();
 var router = express.Router();
-var mailer = require('express-mailer');
-
+var md5 = require('md5');
 
 /*
 * SECURE API USING HELMET
@@ -45,11 +44,13 @@ var con = 'mongodb://hashemirafsan:01625903501RrR@ds133249.mlab.com:33249/userin
 /*
 * HELPING METHOD
 */
-var insert = function(db,data,callback){
+var reGinsert = function(db,data,res,callback){
 	// Get the documents collection 
   var collection = db.collection('user_info');
   collection.insert(data , function(err, result) {
     assert.equal(err, null);
+    res.contentType('application/json');
+    res.json({status:res.statusCode,result:data.token});
     callback(result);
   });
 }
@@ -88,17 +89,6 @@ var errors = function(){
 
 }
 
-mailer.extend(app, {
-  from: 'no-reply@example.com',
-  host: 'smtp.gmail.com', // hostname 
-  secureConnection: true, // use SSL 
-  port: 465, // port for secure SMTP 
-  transportMethod: 'SMTP', // default is SMTP. Accepts anything that nodemailer accepts 
-  auth: {
-    user: 'rafsanhashemi@gmail.com',
-    pass: '01625903501RrR'
-  }
-});
 /*
 * GET REST API
 */
@@ -143,30 +133,25 @@ router.get('/user.checkemail&email=:email',function(req,res){
   });
 });
 
-//user.registration&id=:id&em=:em&bat=:bat&bday=:bday&pass=:pass
-router.get('/user.registration', function (req, res, next) {
+//
+router.post('/user.registration&id=:id&email=:email&bat=:bat&bday=:bday&pass=:pass', function (req, res, next) {
   var data = {
-    id:151425262
+    id:Number(req.params.id),
+    email:req.params.email,
+    bat:req.params.bat,
+    bday:req.params.bday,
+    pass:md5(req.params.pass),
+    security:null,
+    token: Math.floor((Math.random() * 999999) + 99999)
   }
-  res.render('email', {
-        results: data
+   MongoClient.connect(con, function(err, db) {
+    assert.equal(null, err);
+    reGinsert(db,data,res,function(){
+      db.close();
     });
+    db.close();
   });
-  /*
-  app.mailer.send('email', {
-    to: 'rafsanhashemi@gmail.com', // REQUIRED. This can be a comma delimited string just like a normal email to field.  
-    subject: 'Test Email', // REQUIRED. 
-    otherProperty: 'Other Property' // All additional properties are also passed to the template as local variables. 
-  }, function (err) {
-    if (err) {
-      // handle error 
-      console.log(err);
-      res.send('There was an error sending the email');
-      return;
-    }
-    res.send('Email Sent');
-  });
-  */
+});
 
 /*
 * POST REST API
