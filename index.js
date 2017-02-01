@@ -133,8 +133,10 @@ router.get('/user.checkemail&email=:email',function(req,res){
   });
 });
 
+
 //
 router.post('/user.registration&id=:id&email=:email&bat=:bat&bday=:bday&pass=:pass', function (req, res, next) {
+
   var data = {
     id:Number(req.params.id),
     email:req.params.email,
@@ -144,15 +146,14 @@ router.post('/user.registration&id=:id&email=:email&bat=:bat&bday=:bday&pass=:pa
     security:null,
     token: Math.floor((Math.random() * 999999) + 99999)
   }
-   MongoClient.connect(con, function(err, db) {
-    assert.equal(null, err);
-    reGinsert(db,data,res,function(){
+     MongoClient.connect(con, function(err, db) {
+      assert.equal(null, err);
+      reGinsert(db,data,res,function(){
+        db.close();
+      });
       db.close();
     });
-    db.close();
   });
-});
-
 /*
 * POST REST API
 */
@@ -174,7 +175,7 @@ router.post('/user.registration&id=:id&email=:email&bat=:bat&bday=:bday&pass=:pa
 /*
 * ROUTER INITIAL PART
 */
-
+app.use(express.static(__dirname + '/views'));
 app.use('/api', router);
 
 
