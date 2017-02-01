@@ -144,19 +144,14 @@ router.get('/user.checkemail&email=:email',function(req,res){
 });
 
 //user.registration&id=:id&em=:em&bat=:bat&bday=:bday&pass=:pass
-router.get('/user.registration', function (req, res, next) {
+router.get('/user.registration&em=:em', function (req, res, next) {
   var data = {
     id:151425262
   }
-  res.render('email', {
-        results: data
-    });
-  });
-  /*
-  app.mailer.send('email', {
-    to: 'rafsanhashemi@gmail.com', // REQUIRED. This can be a comma delimited string just like a normal email to field.  
-    subject: 'Test Email', // REQUIRED. 
-    otherProperty: 'Other Property' // All additional properties are also passed to the template as local variables. 
+  app.mailer.send('registration', {
+    to: req.params.em, // REQUIRED. This can be a comma delimited string just like a normal email to field.  
+    subject: 'Registration Confirmation', // REQUIRED. 
+    otherProperty: data // All additional properties are also passed to the template as local variables. 
   }, function (err) {
     if (err) {
       // handle error 
@@ -166,8 +161,7 @@ router.get('/user.registration', function (req, res, next) {
     }
     res.send('Email Sent');
   });
-  */
-
+ });
 /*
 * POST REST API
 */
@@ -189,7 +183,7 @@ router.get('/user.registration', function (req, res, next) {
 /*
 * ROUTER INITIAL PART
 */
-
+app.use(express.static(__dirname + '/views'));
 app.use('/api', router);
 
 
