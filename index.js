@@ -13,12 +13,14 @@ var MongoClient = require('mongodb').MongoClient
 var bodyParser = require('body-parser');
 var app = express();
 var router = express.Router();
-
+var mailer = require('express-mailer');
 
 
 /*
 * SECURE API USING HELMET
 */
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
 app.use(helmet()); //initial helmet here
 app.use(helmet.noCache()); //nocache
 app.use(helmet.contentSecurityPolicy({
@@ -86,7 +88,17 @@ var errors = function(){
 
 }
 
-
+mailer.extend(app, {
+  from: 'no-reply@example.com',
+  host: 'smtp.gmail.com', // hostname 
+  secureConnection: true, // use SSL 
+  port: 465, // port for secure SMTP 
+  transportMethod: 'SMTP', // default is SMTP. Accepts anything that nodemailer accepts 
+  auth: {
+    user: 'rafsanhashemi@gmail.com',
+    pass: '01625903501RrR'
+  }
+});
 /*
 * GET REST API
 */
@@ -130,6 +142,31 @@ router.get('/user.checkemail&email=:email',function(req,res){
     db.close();
   });
 });
+
+//user.registration&id=:id&em=:em&bat=:bat&bday=:bday&pass=:pass
+router.get('/user.registration', function (req, res, next) {
+  var data = {
+    id:151425262
+  }
+  res.render('email', {
+        results: data
+    });
+  });
+  /*
+  app.mailer.send('email', {
+    to: 'rafsanhashemi@gmail.com', // REQUIRED. This can be a comma delimited string just like a normal email to field.  
+    subject: 'Test Email', // REQUIRED. 
+    otherProperty: 'Other Property' // All additional properties are also passed to the template as local variables. 
+  }, function (err) {
+    if (err) {
+      // handle error 
+      console.log(err);
+      res.send('There was an error sending the email');
+      return;
+    }
+    res.send('Email Sent');
+  });
+  */
 
 /*
 * POST REST API
