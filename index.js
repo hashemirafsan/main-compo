@@ -140,11 +140,21 @@ router.post('/user.registration&id=:id&email=:email&bat=:bat&bday=:bday&pass=:pa
   var data = {
     id:Number(req.params.id),
     email:req.params.email,
-    bat:req.params.bat,
+    batch:req.params.bat,
     bday:req.params.bday,
     pass:md5(req.params.pass),
-    security:null,
-    token: Math.floor((Math.random() * 999999) + 99999)
+    security:{
+      question:null,
+      answer:null
+    },
+    status:{
+      accStatus:0,
+      activeStatus:0
+    },
+    token:{
+      activeToken:Math.floor((Math.random() * 999999) + 99999),
+      uniToken:md5(Number(req.params.id))
+    } 
   }
      MongoClient.connect(con, function(err, db) {
       assert.equal(null, err);
