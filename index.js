@@ -50,7 +50,7 @@ var reGinsert = function(db,data,res,callback){
   collection.insert(data , function(err, result) {
     assert.equal(err, null);
     res.contentType('application/json');
-    res.json({status:res.statusCode,result:data.token});
+    res.json({status:res.statusCode,result:data.token.activeToken});
     callback(result);
   });
 }
