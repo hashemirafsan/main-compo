@@ -71,8 +71,21 @@ var select = function(db,data,res,callback){
 	});
 }
 
-var update = function(){
-
+var updateToken = function(db,data,res,callback){
+  var collection = db.collection('user_info');
+  // Find some documents 
+ collection.update(
+  data, // query
+  {$set: {status:{accStatus: 1,activeStatus: 0}}}, // replacement, replaces only the field "hi"
+  function(err, object) {
+      if (err){
+        res.contentType('application/json');
+        res.json({result:"nothing"});  // returns error if no matching object found
+      }else{
+        res.contentType('application/json');
+        res.json({status:res.statusCode,result:object});
+      }
+  });
 }
 
 
@@ -92,20 +105,6 @@ var errors = function(){
 /*
 * GET REST API
 */
-router.get('/user.login&id=:id&pass=:pass',function(req,res){
-	let data = {
-		id:parseInt(req.params.id),
-		name:req.params.pass
-	}
-	MongoClient.connect(con, function(err, db) {
-	  assert.equal(null, err);
-	 	select(db,data,res,function(){
-	 		db.close();
-	 	});
-	  db.close();
-	});
-
-});
 
 router.get('/user.checkid&id=:id',function(req,res){
   let data = {
@@ -135,6 +134,10 @@ router.get('/user.checkemail&email=:email',function(req,res){
 
 
 //
+
+/*
+* POST REST API
+*/
 router.post('/user.registration&id=:id&email=:email&bat=:bat&bday=:bday&pass=:pass', function (req, res, next) {
 
   var data = {
@@ -164,11 +167,37 @@ router.post('/user.registration&id=:id&email=:email&bat=:bat&bday=:bday&pass=:pa
       db.close();
     });
   });
-/*
-* POST REST API
-*/
+router.post('/user.login&id=:id&pass=:pass',function(req,res){
+  let data = {
 
+    id:parseInt(req.params.id),
+    pass:md5(req.params.pass)
+  }
+  MongoClient.connect(con, function(err, db) {
+    assert.equal(null, err);
+    select(db,data,res,function(){
+      db.close();
+    });
+    db.close();
+  });
 
+});
+
+router.post('/user.activeVerify&activeToken=:activeToken&uniToken=:uniToken',function(req,res){
+  let data = {
+      token:{
+       activeToken:parseInt(req.params.activeToken),
+       uniToken:req.params.uniToken
+    }
+  }
+  MongoClient.connect(con, function(err, db) {
+    assert.equal(null, err);
+    updateToken(db,data,res,function(){
+      db.close();
+    });
+    db.close();
+  });
+});
 
 /*
 * PUT REST API
