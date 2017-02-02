@@ -153,7 +153,7 @@ router.post('/user.registration&id=:id&email=:email&bat=:bat&bday=:bday&pass=:pa
     },
     token:{
       activeToken:Math.floor((Math.random() * 999999) + 99999),
-      uniToken:md5(Number(req.params.id))
+      uniToken:md5(Number(req.params.id) + new Date())
     } 
   }
      MongoClient.connect(con, function(err, db) {
