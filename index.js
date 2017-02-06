@@ -138,7 +138,7 @@ router.get('/user.checkemail&email=:email',function(req,res){
 /*
 * POST REST API
 */
-router.post('/user.registration&id=:id&email=:email&bat=:bat&bday=:bday&pass=:pass', function (req, res, next) {
+router.post('/user.registration&id=:id&email=:email&bat=:bat&bday=:bday&pass=:pass&degree=:degree', function (req, res, next) {
 
   var data = {
     id:Number(req.params.id),
@@ -146,6 +146,7 @@ router.post('/user.registration&id=:id&email=:email&bat=:bat&bday=:bday&pass=:pa
     batch:req.params.bat,
     bday:req.params.bday,
     pass:md5(req.params.pass),
+    degree: req.params.degree,
     security:{
       question:null,
       answer:null
