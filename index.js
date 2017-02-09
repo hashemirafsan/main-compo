@@ -228,8 +228,6 @@ router.post('/user.registration&id=:id&email=:email&bat=:bat&bday=:bday&pass=:pa
       uniToken:md5(Number(req.params.id) + new Date())
     } 
   }
-  res.send(data);
-  /*
      MongoClient.connect(con, function(err, db) {
       assert.equal(null, err);
       reGinsert(db,data,res,function(){
@@ -237,7 +235,6 @@ router.post('/user.registration&id=:id&email=:email&bat=:bat&bday=:bday&pass=:pa
       });
       db.close();
     });
-  */
   });
 router.post('/user.login&id=:id&pass=:pass',function(req,res){
   let data = {
