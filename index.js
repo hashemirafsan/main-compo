@@ -139,14 +139,82 @@ router.get('/user.checkemail&email=:email',function(req,res){
 * POST REST API
 */
 router.post('/user.registration&id=:id&email=:email&bat=:bat&bday=:bday&pass=:pass&degree=:degree', function (req, res, next) {
-
+    var degree = [
+                {
+                  name:"B.Sc. in Civil Engineering",
+                  code:"604",
+                },
+                {
+                  name:"Master of Arts in Islamic Studies",
+                  code:"547"
+                },
+                {
+                  name:"M.A. (Preli) in Islamic Studies",
+                  code:"546"
+                },
+                {
+                  name:"Bachelor of Arts (Honours) in Islamic Studies",
+                  code:"545"
+                },
+                {
+                  name:"Bachelor of Architecture",
+                  code:"481"
+                },
+                {
+                  name:"Master in Public Health",
+                  code:"479"
+                },
+                {
+                  name:"Master of Laws",
+                  code:"440"
+                },
+                {
+                  name:"Bachelor of Laws (Honours)",
+                  code:"439"
+                },
+                {
+                  name:"Master of Business Administration (Executive)",
+                  code:"425"
+                },
+                {
+                  name:"Master of Business Administration",
+                  code:"424"
+                },
+                {
+                  name:"Bachelor of Business Administration (Honours)",
+                  code:"423"
+                },
+                {
+                  name: "Master of Arts in English",
+                  code:"414"
+                },
+                {
+                  name:"Bachelor of Arts (Honours) in English",
+                  code:"412"
+                },
+                {
+                  name:"B.Sc. (Honours) in Electrical & Electronic Engineering",
+                  code:"398"
+                },
+                {
+                  name:"B.Sc. (Honours) in Computer Science & Engineering",
+                  code:"369"
+                }
+              ];
+              
+            function findData(data) { 
+              return data.name === req.params.degree;
+            }
+            var degreeC = degree.find(findData);
+            var degreeCode = degreeC.code;
+            
   var data = {
     id:Number(req.params.id),
     email:req.params.email,
     batch:req.params.bat,
     bday:req.params.bday,
     pass:md5(req.params.pass),
-    degree: req.params.degree,
+    degree: degreeCode,
     security:{
       question:null,
       answer:null
@@ -160,6 +228,8 @@ router.post('/user.registration&id=:id&email=:email&bat=:bat&bday=:bday&pass=:pa
       uniToken:md5(Number(req.params.id) + new Date())
     } 
   }
+  res.send(data);
+  /*
      MongoClient.connect(con, function(err, db) {
       assert.equal(null, err);
       reGinsert(db,data,res,function(){
@@ -167,6 +237,7 @@ router.post('/user.registration&id=:id&email=:email&bat=:bat&bday=:bday&pass=:pa
       });
       db.close();
     });
+  */
   });
 router.post('/user.login&id=:id&pass=:pass',function(req,res){
   let data = {
